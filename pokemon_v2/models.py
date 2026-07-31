@@ -1127,7 +1127,7 @@ class EncounterMethodName(HasEncounterMethod, IsName):
 class EncounterSlot(HasVersionGroup, HasEncounterMethod):
     slot = models.IntegerField(blank=True, null=True)
 
-    rarity = models.IntegerField()
+    rarity = models.IntegerField(blank=True, null=True)
 
 
 class Encounter(HasVersion, HasLocationArea, HasPokemon):

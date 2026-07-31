@@ -2030,7 +2030,7 @@ def _build_encounters():
             version_group_id=int(info[1]),
             encounter_method_id=int(info[2]),
             slot=int(info[3]) if info[3] != "" else None,
-            rarity=int(info[4]),
+            rarity=int(info[4]) if info[4] != "" else None,
         )
 
     build_generic((EncounterSlot,), "encounter_slots.csv", csv_record_to_objects)
