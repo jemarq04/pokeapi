@@ -15,10 +15,29 @@ class AbilityTestCase(TestCase):
         self.assertEqual(smell.generation_id, 3)
 
 
-class EncounterPokemonDetailTestCase(TestCase):
+class EncounterTestCase(TestCase):
+    csv_dir = os.path.join(settings.BASE_DIR, "data", "v2", "csv")
+
+    def test_null_slot_rarity(self):
+        with open(os.path.join(self.csv_dir, "versio_groups.csv")) as infile:
+            reader = csv.DictReader()
+            version_groups = {row["id"]: row for row in reader}
+
+        with open(os.path.join(self.csv_dir, "encounter_slots.csv")) as infile:
+            reader = csv.DictReader(infile)
+            for row in reader:
+                version_group_id = row["version_group_id"]
+                if not row["rarity"] and not (
+                    version_group_id == "24" or int(version_groups[version_group_id]["generation_id"]) >= 9
+                ):
+                    self.fail(
+                        f"Found null slot rarity for slot {row['id']}.\n"
+                        "Negative slot rarities only allowed for Legends Arceus "
+                        " and generation 9 games."
+                    )
+
     def test_unique_encounter_pokemon_details(self):
-        csv_dir = os.path.join(settings.BASE_DIR, "data", "v2", "csv")
-        with open(os.path.join(csv_dir, "encounter_pokemon_details.csv")) as infile:
+        with open(os.path.join(self.csv_dir, "encounter_pokemon_details.csv")) as infile:
             reader = csv.DictReader(infile)
             encounter_ids = []
             duplicate_ids = []
