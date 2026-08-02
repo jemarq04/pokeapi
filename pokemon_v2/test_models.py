@@ -19,8 +19,8 @@ class EncounterTestCase(TestCase):
     csv_dir = os.path.join(settings.BASE_DIR, "data", "v2", "csv")
 
     def test_null_slot_rarity(self):
-        with open(os.path.join(self.csv_dir, "versio_groups.csv")) as infile:
-            reader = csv.DictReader()
+        with open(os.path.join(self.csv_dir, "version_groups.csv")) as infile:
+            reader = csv.DictReader(infile)
             version_groups = {row["id"]: row for row in reader}
 
         with open(os.path.join(self.csv_dir, "encounter_slots.csv")) as infile:
