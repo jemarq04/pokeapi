@@ -936,7 +936,6 @@ id,region_id,identifier
 952,9,aipom-hill
 953,9,ancient-quarry
 954,9,arenas-approach
-955,9,aspiration-hill
 956,9,avalanche-slopes
 957,9,avaluggs-legacy
 958,9,bathers-lagoon
@@ -1103,3 +1102,4 @@ id,region_id,identifier
 1119,8,roaming-crown-tundra
 1120,8,galar-wild-area-max-dens
 1121,6,kalos-berry-fields
+1122,9,obsidian-fieldlands
