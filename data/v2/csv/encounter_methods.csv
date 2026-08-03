@@ -65,3 +65,5 @@ id,identifier,order
 64,ceiling-ambush,59
 65,ground-ambush,60
 66,sky-ambush,61
+67,shaking-trees,67
+68,shaking-ore-deposits,68
