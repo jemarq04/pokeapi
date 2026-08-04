@@ -1173,11 +1173,15 @@ class EncounterPokemonDetail(models.Model):
 
     min_perfect_ivs = models.IntegerField(blank=True, null=True)
 
+    alpha_min_level = models.IntegerField(blank=True, null=True)
+
+    alpha_max_level = models.IntegerField(blank=True, null=True)
+
     always_shiny = models.BooleanField(default=False)
 
     never_shiny = models.BooleanField(default=False)
 
-    is_alpha = models.BooleanField(default=False)
+    always_alpha = models.BooleanField(default=False)
 
 
 #################

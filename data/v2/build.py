@@ -2089,9 +2089,11 @@ def _build_encounters():
         yield EncounterPokemonDetail(
             encounter_id=int(info[0]),
             min_perfect_ivs=int(info[1]) if info[1] != "" else None,
-            always_shiny=bool(int(info[2])),
-            never_shiny=bool(int(info[3])),
-            is_alpha=bool(int(info[4])),
+            alpha_min_level=int(info[2]) if info[2] != "" else None,
+            alpha_max_level=int(info[3]) if info[3] != "" else None,
+            always_shiny=bool(int(info[4])),
+            never_shiny=bool(int(info[5])),
+            always_alpha=bool(int(info[6])),
         )
 
     build_generic(
