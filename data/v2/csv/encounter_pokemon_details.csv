@@ -199,3 +199,5 @@ encounter_id,min_perfect_ivs,alpha_min_level,alpha_max_level,always_shiny,never_
 123044,,24,29,0,0,0
 123045,,22,29,0,0,0
 123046,,12,12,0,0,1
+123048,,26,29,0,0,0
+123049,,31,34,0,0,0
