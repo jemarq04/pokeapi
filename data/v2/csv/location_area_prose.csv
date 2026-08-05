@@ -2286,6 +2286,9 @@ location_area_id,local_language_id,name
 1001,5,Chute d'Obsidienne,
 1001,6,Obsidian-Wasserfall,
 1001,9,Obsidian Falls,
+1002,5,Tunnel de Fer,
+1002,6,Erztunnel,
+1002,9,Oreburrow Tunnel,
 1167,9,Lighthouse Basement
 1167,6,Leuchtturm Keller
 1167,5,Phare de la Liberté
