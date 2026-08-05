@@ -116,6 +116,12 @@ class GrowthRateSummarySerializer(serializers.HyperlinkedModelSerializer):
         fields = ("name", "url")
 
 
+class CurrencySummarySerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Currency
+        fields = ("name", "url")
+
+
 class ItemPocketSummarySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ItemPocket
@@ -1682,6 +1688,27 @@ class ItemAttributeDetailSerializer(serializers.ModelSerializer):
         return items
 
 
+###########################
+#  CURRENCY SERIALIZERS  #
+###########################
+
+
+class CurrencyNameSerializer(serializers.ModelSerializer):
+    language = LanguageSummarySerializer()
+
+    class Meta:
+        model = CurrencyName
+        fields = ("name", "language")
+
+
+class CurrencyDetailSerializer(serializers.ModelSerializer):
+    names = CurrencyNameSerializer(many=True, read_only=True, source="currencyname")
+
+    class Meta:
+        model = Currency
+        fields = ("id", "name", "names")
+
+
 ###################################
 #  ITEM FLING EFFECT SERIALIZERS  #
 ###################################
@@ -1731,6 +1758,20 @@ class ItemGameIndexSerializer(serializers.ModelSerializer):
         fields = ("game_index", "generation")
 
 
+class ItemPriceSerializer(serializers.ModelSerializer):
+    currency = CurrencySummarySerializer()
+    version_group = VersionGroupSummarySerializer()
+
+    class Meta:
+        model = ItemPrice
+        fields = (
+            "purchase_price",
+            "sell_price",
+            "currency",
+            "version_group",
+        )
+
+
 class ItemNameSerializer(serializers.ModelSerializer):
     language = LanguageSummarySerializer()
 
@@ -1748,6 +1789,7 @@ class ItemSpritesSerializer(serializers.ModelSerializer):
 class ItemDetailSerializer(serializers.ModelSerializer):
     names = ItemNameSerializer(many=True, read_only=True, source="itemname")
     game_indices = ItemGameIndexSerializer(many=True, read_only=True, source="itemgameindex")
+    prices = ItemPriceSerializer(many=True, read_only=True, source="itemprice")
     effect_entries = ItemEffectTextSerializer(many=True, read_only=True, source="itemeffecttext")
     flavor_text_entries = ItemFlavorTextSerializer(many=True, read_only=True, source="itemflavortext")
     category = ItemCategorySummarySerializer(source="item_category")
@@ -1763,7 +1805,6 @@ class ItemDetailSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
-            "cost",
             "fling_power",
             "fling_effect",
             "attributes",
@@ -1771,6 +1812,7 @@ class ItemDetailSerializer(serializers.ModelSerializer):
             "effect_entries",
             "flavor_text_entries",
             "game_indices",
+            "prices",
             "names",
             "held_by_pokemon",
             "sprites",
