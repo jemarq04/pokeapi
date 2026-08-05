@@ -57,7 +57,7 @@ id,identifier,order
 56,overworld-dirt,56
 57,wanderer,57
 58,wanderer-water,58
-59,chase-water,59
+59,wanderer-flying,59
 60,dynamax-adventure,60
 61,max-raid,61
 62,trash-can-ambush,62
@@ -68,3 +68,4 @@ id,identifier,order
 67,shaking-trees,67
 68,shaking-ore-deposits,68
 69,mass-outbreak,69
+70,chase-water,70
