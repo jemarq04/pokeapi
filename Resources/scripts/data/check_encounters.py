@@ -7,15 +7,15 @@ import argparse
 import csv
 import json
 import os
-from typing import Iterable, Optional
+from collections.abc import Iterable
 
 CSVDIR = os.path.join(os.path.dirname(__file__), "../../../data/v2/csv")
 
 
 def read_csv(
     filename: str,
-    before: Optional[int] = None,
-    after: Optional[int] = None,
+    before: int | None = None,
+    after: int | None = None,
     non_unique: bool = False,
     csvdir: str = CSVDIR,
 ) -> dict:
@@ -27,7 +27,7 @@ def read_csv(
     with open(os.path.join(csvdir, filename)) as infile:
         reader = csv.DictReader(infile)
         for row in reader:
-            row_id = list(row.values())[0]
+            row_id = next(iter(row.values()))
             if before is not None and int(row_id) > before:
                 break
             if after is not None and int(row_id) < after:
@@ -41,14 +41,14 @@ def read_csv(
     return result
 
 
-def get_entry_by_identifier(entries: Iterable, identifier: str) -> Optional[dict]:
+def get_entry_by_identifier(entries: Iterable, identifier: str) -> dict | None:
     for entry in entries:
         if "identifier" in entry and entry["identifier"] == identifier:
             return entry
     return None
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-l",
@@ -117,11 +117,11 @@ def main():
         if val["identifier"].startswith("weather-")
     ]
 
-    def expand_source(info: dict, maxdepth: int = 1):
+    def expand_source(info: dict, maxdepth: int = 1) -> None:
         if maxdepth <= 0:
             return
 
-        for key in info:
+        for key in info:  # noqa
             if key.endswith("_id"):
                 src = key.replace("_id", "")
                 if src not in sources:
@@ -130,7 +130,7 @@ def main():
                 expand_source(info[key], maxdepth - 1)
 
     # Recursively link information from the defined sources
-    for enc_id, enc in encounters.items():
+    for enc in encounters.values():
         expand_source(enc, 3)
 
     # Link encounter conditions to relevant encounters
@@ -248,22 +248,20 @@ def main():
                 ]
 
             # Add encounter pokemon details, if they exist
-            if "pokemon_details" in enc:
-                output["encounters"][-1]["pokemon_details"] = [
-                    {key: val for key, val in enc["pokemon_details"].items() if val}
-                ]
+            if "pokemon_details" in enc and (
+                details := {key: val for key, val in enc["pokemon_details"].items() if val and val != "0"}
+            ):
+                output["encounters"][-1]["pokemon_details"] = [details]
 
         if args.sort_by_natdex:
-            output["encounters"] = list(
-                sorted(
-                    output["encounters"],
-                    key=lambda item: int(
-                        get_entry_by_identifier(sources["pokemon"].values(), item["pokemon"])["species_id"]
-                    ),
-                )
+            output["encounters"] = sorted(
+                output["encounters"],
+                key=lambda item: (
+                    int(entry["species_id"])
+                    if (entry := get_entry_by_identifier(sources["pokemon"].values(), item["pokemon"])) is not None
+                    else -1
+                ),
             )
-            for encounter in output["encounters"]:
-                pass
         return output
 
     # Summarize encounter information for output
@@ -287,14 +285,17 @@ def main():
                     output[method][version] = dict(
                         sorted(
                             entries.items(),
-                            key=lambda item: int(
-                                get_entry_by_identifier(sources["pokemon"].values(), item[0].split()[0])["species_id"]
+                            key=lambda item: (
+                                int(entry["species_id"])
+                                if (entry := get_entry_by_identifier(sources["pokemon"].values(), item[0].split()[0]))
+                                is not None
+                                else -1
                             ),
                         )
                     )
         return output
 
-    def write_json(filename: str, output: dict):
+    def write_json(filename: str, output: dict) -> None:
         with open(os.path.join(args.outdir, filename), "w") as outfile:
             json.dump(output, outfile, indent=2)
             outfile.write("\n")

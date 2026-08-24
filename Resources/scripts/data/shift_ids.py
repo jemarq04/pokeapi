@@ -12,7 +12,7 @@ import os
 CSVDIR = os.path.join(os.path.dirname(__file__), "../data/v2/csv")
 
 
-def write_shifted_entries(filename: str, args, *keys):
+def write_shifted_entries(filename: str, args: argparse.Namespace, *keys: list[str]) -> None:
     if not filename.endswith(".csv"):
         filename += ".csv"
 
@@ -20,7 +20,7 @@ def write_shifted_entries(filename: str, args, *keys):
     entries = []
     with open(os.path.join(CSVDIR, filename)) as infile:
         reader = csv.DictReader(infile)
-        entries = [row for row in reader]
+        entries = list(reader)
 
     # Shift IDs
     result = []
