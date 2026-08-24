@@ -115,8 +115,4 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
         ),
-        migrations.RemoveField(
-            model_name="item",
-            name="cost",
-        ),
     ]
